@@ -1,14 +1,17 @@
 from __future__ import print_function
+
+import sys
+sys.path.append('/home/kyzhan/deeplearning/code/localization/caffe/python')
+
 import caffe
 from caffe.model_libs import *
-from google.protobuf import text_format
 
 import math
 import os
 import shutil
 import stat
 import subprocess
-import sys
+
 
 # Add extra layers on top of a "base" network (e.g. VGGNet or Inception).
 def AddExtraLayers(net, use_batchnorm=True):
@@ -53,13 +56,28 @@ resume_training = True
 # If true, Remove old model files.
 remove_old_models = False
 
+#######  VOC setting  ##########
+train_data_voc = "examples/VOC0712/VOC0712_trainval_lmdb"
+test_data_voc = "examples/VOC0712/VOC0712_test_lmdb"
+
+
+#######  ILSVRC2015 setting  ##########
+
+
+
 # The database file for training data. Created by data/VOC0712/create_data.sh
-train_data = "examples/VOC0712/VOC0712_trainval_lmdb"
+train_data = train_data_voc
 # The database file for testing data. Created by data/VOC0712/create_data.sh
-test_data = "examples/VOC0712/VOC0712_test_lmdb"
+test_data = test_data_voc
 # Specify the batch sampler.
-resize_width = 300
-resize_height = 300
+
+
+
+img_size = 224
+bt_size = 2
+
+resize_width = img_size #300
+resize_height = img_size #300
 resize = "{}x{}".format(resize_width, resize_height)
 batch_sampler = [
         {
@@ -250,7 +268,7 @@ loss_param = {
 
 # parameters for generating priors.
 # minimum dimension of input image
-min_dim = 300
+min_dim = img_size
 # conv4_3 ==> 38 x 38
 # fc7 ==> 19 x 19
 # conv6_2 ==> 10 x 10
@@ -282,17 +300,18 @@ clip = True
 
 # Solver parameters.
 # Defining which GPUs to use.
-gpus = "0,1,2,3"
+gpus = "0" #"0,1,2,3"
 gpulist = gpus.split(",")
 num_gpus = len(gpulist)
 
 # Divide the mini-batch to different GPUs.
-batch_size = 32
-accum_batch_size = 32
+batch_size = bt_size
+accum_batch_size = bt_size
 iter_size = accum_batch_size / batch_size
 solver_mode = P.Solver.CPU
 device_id = 0
 batch_size_per_device = batch_size
+
 if num_gpus > 0:
   batch_size_per_device = int(math.ceil(float(batch_size) / num_gpus))
   iter_size = int(math.ceil(float(accum_batch_size) / (batch_size_per_device * num_gpus)))
@@ -328,7 +347,7 @@ solver_param = {
     'momentum': 0.9,
     'iter_size': iter_size,
     'max_iter': 60000,
-    'snapshot': 40000,
+    'snapshot': 20000,
     'display': 10,
     'average_loss': 10,
     'type': "SGD",

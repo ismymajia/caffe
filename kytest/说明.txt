@@ -1,0 +1,6 @@
+
+for image:
+./distribute/bin/ssd_detect.bin ./kytest/deploy.prototxt ./kytest/VGG_ilsvrc15_SSD_300x300_iter_480000.caffemodel ./kytest/filelist.txt -confidence_threshold 0.1
+
+for video:
+./distribute/bin/ssd_detect.bin ./kytest/deploy.prototxt ./kytest/VGG_ilsvrc15_SSD_300x300_iter_480000.caffemodel ./kytest/filelist_video.txt -confidence_threshold 0.1 -file_type video

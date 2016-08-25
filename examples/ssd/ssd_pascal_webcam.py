@@ -64,8 +64,9 @@ code_type = P.PriorBox.CENTER_SIZE
 # Stores LabelMapItem.
 label_map_file = "data/VOC0712/labelmap_voc.prototxt"
 # The resized image size
-resize_width = 300
-resize_height = 300
+img_size = 300
+resize_width = img_size #300
+resize_height = img_size #300
 
 # Parameters needed for test.
 # Set the number of test iterations to the maximum integer number.
@@ -82,7 +83,7 @@ visualize_threshold = 0.6
 webcam_width = 640
 webcam_height = 480
 # Scale the image size for display.
-scale = 1.5
+scale = 1.0
 
 ### Hopefully you don't need to change the following ###
 resize = "{}x{}".format(resize_width, resize_height)
@@ -159,7 +160,7 @@ pretrain_model = "{}_iter_{}.caffemodel".format(snapshot_prefix, max_iter)
 
 # parameters for generating priors.
 # minimum dimension of input image
-min_dim = 300
+min_dim = img_size #300
 # conv4_3 ==> 38 x 38
 # fc7 ==> 19 x 19
 # conv6_2 ==> 10 x 10

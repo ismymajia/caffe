@@ -1,0 +1,2 @@
+./kytest/6.jpg
+./kytest/fish-bike.jpg
